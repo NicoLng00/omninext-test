@@ -15,23 +15,18 @@ from Modules.Users.User import User
 from mongoengine.errors import DoesNotExist, ValidationError, NotUniqueError
 
 class TestUserService(unittest.TestCase):
-    """Test unitari per i metodi della classe UserService."""
     
     def setUp(self):
-        # Setup di Flask con JWT per i test
         self.app = Flask(__name__)
         self.app.config['JWT_SECRET_KEY'] = 'test-secret-key'
         self.jwt = JWTManager(self.app)
         
         self.user_service = UserService()
         
-        # JWT token da utilizzare nei test
         self.example_jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
         
-        # Aggiungi il token negli headers per le richieste autenticate
         self.auth_headers = {'Authorization': f'Bearer {self.example_jwt}'}
         
-        # Password per test
         self.test_password = "password123"
         self.hashed_password = bcrypt.hashpw(self.test_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     
@@ -48,11 +43,11 @@ class TestUserService(unittest.TestCase):
     
     def test_validate_email_invalid(self):
         invalid_emails = [
-            "user@example",
-            "user.example.com",
-            "@example.com",
-            "user@.com",
-            "user space@example.com"
+            "user@example",  # dominio incompleto
+            "user.example.com",  # manca la @
+            "@example.com",  # manca il local part
+            "user@.com",  # manca il domain name
+            "user space@example.com"  # contiene spazi
         ]
         
         for email in invalid_emails:
@@ -61,8 +56,6 @@ class TestUserService(unittest.TestCase):
     @patch('Modules.Users.Services.UserService.User.objects')
     @patch('flask_jwt_extended.verify_jwt_in_request')
     def test_find_by_id_existing_user(self, mock_verify_jwt, mock_objects):
-        """Test recupero di un utente esistente tramite ID con JWT."""
-        # Simula verifica JWT valida
         mock_verify_jwt.return_value = True
         
         mock_user = MagicMock()
@@ -74,7 +67,6 @@ class TestUserService(unittest.TestCase):
         
         mock_objects.get.return_value = mock_user
         
-        # Usiamo il token JWT nella richiesta
         with self.app.test_request_context(headers=self.auth_headers):
             response, status_code = self.user_service.find_by_id('507f1f77bcf86cd799439011')
         
@@ -89,13 +81,10 @@ class TestUserService(unittest.TestCase):
     @patch('Modules.Users.Services.UserService.User.objects')
     @patch('flask_jwt_extended.verify_jwt_in_request')
     def test_find_by_id_nonexistent_user(self, mock_verify_jwt, mock_objects):
-        """Test recupero di un utente inesistente con JWT."""
-        # Simula verifica JWT valida
         mock_verify_jwt.return_value = True
         
         mock_objects.get.side_effect = DoesNotExist()
         
-        # Usiamo il token JWT nella richiesta
         with self.app.test_request_context(headers=self.auth_headers):
             response, status_code = self.user_service.find_by_id('507f1f77bcf86cd799439011')
         
@@ -106,8 +95,6 @@ class TestUserService(unittest.TestCase):
     @patch('Modules.Users.Services.UserService.User')
     @patch('bcrypt.hashpw')
     def test_create_valid_user(self, mock_hashpw, mock_user_class):
-        """Test creazione di un utente con dati validi."""
-        # Setup delle mock
         mock_hashpw.return_value = self.hashed_password.encode('utf-8')
         
         mock_user = MagicMock()
@@ -125,7 +112,6 @@ class TestUserService(unittest.TestCase):
             'password': self.test_password
         }
         
-        # La creazione utente di solito NON richiede un token JWT, quindi non lo includiamo
         response, status_code = self.user_service.create(data)
         
         self.assertEqual(status_code, 201)
@@ -139,7 +125,6 @@ class TestUserService(unittest.TestCase):
         mock_user.save.assert_called_once()
     
     def test_create_user_missing_fields(self):
-        """Test creazione utente con campi mancanti."""
         test_cases = [
             {'name': 'Solo Nome'},
             {'email': 'solo@email.com'},
@@ -160,7 +145,6 @@ class TestUserService(unittest.TestCase):
             )
     
     def test_create_user_invalid_email(self):
-        """Test creazione utente con email non valida."""
         data = {
             'name': 'Utente Test',
             'email': 'non-valida',
@@ -175,7 +159,6 @@ class TestUserService(unittest.TestCase):
     @patch('Modules.Users.Services.UserService.User')
     @patch('bcrypt.hashpw')
     def test_create_user_duplicate_email(self, mock_hashpw, mock_user_class):
-        """Test creazione utente con email duplicata."""
         mock_hashpw.return_value = self.hashed_password.encode('utf-8')
         
         mock_user = MagicMock()
@@ -196,7 +179,6 @@ class TestUserService(unittest.TestCase):
     @patch('Modules.Users.Services.UserService.User')
     @patch('bcrypt.hashpw')
     def test_create_user_unexpected_error(self, mock_hashpw, mock_user_class):
-        """Test gestione di errori imprevisti durante la creazione."""
         mock_hashpw.return_value = self.hashed_password.encode('utf-8')
         
         mock_user = MagicMock()
