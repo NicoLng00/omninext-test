@@ -13,6 +13,9 @@ Per la persistenza dei dati, ho scelto MongoDB per la sua flessibilità nello sc
 ### Flask-RESTX
 Ho integrato Flask-RESTX per la documentazione automatica delle API tramite Swagger UI. Questo garantisce una documentazione sempre aggiornata e interattiva, migliorando notevolmente l'esperienza degli sviluppatori che utilizzano queste API.
 
+### JWT per l'Autenticazione
+Il sistema implementa JSON Web Tokens (JWT) tramite Flask-JWT-Extended per l'autenticazione e l'autorizzazione. Questo approccio stateless è ideale per API RESTful, permettendo una gestione sicura delle sessioni utente senza necessità di archiviazione lato server. Le password degli utenti vengono criptate con bcrypt prima di essere memorizzate.
+
 ### Pattern Architetturale
 Il progetto implementa un pattern architetturale a livelli ben definiti:
 - **Controller**: gestisce le richieste HTTP e le risposte
@@ -80,3 +83,70 @@ I test unitari utilizzano il pattern AAA (Arrange-Act-Assert) e sfruttano la lib
 - **Auto-verificanti**: Determinano automaticamente se il test è passato o fallito
 
 Questo approccio assicura che i cambiamenti al codice possano essere testati rapidamente e con fiducia.
+
+## Autenticazione JWT
+
+Il sistema utilizza JSON Web Token (JWT) per l'autenticazione degli utenti. Di seguito sono riportate le istruzioni per l'utilizzo del sistema di autenticazione.
+
+### Endpoint di autenticazione
+
+#### Registrazione nuovo utente
+
+```
+POST /auth/register
+```
+
+Corpo della richiesta:
+```json
+{
+  "name": "Nome Utente",
+  "email": "example@domain.com",
+  "password": "securepassword123"
+}
+```
+
+Risposta (201 Created):
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI...",
+  "user": {
+    "_id": "656e7a...",
+    "name": "Nome Utente",
+    "email": "example@domain.com"
+  }
+}
+```
+
+#### Login utente esistente
+
+```
+POST /auth/login
+```
+
+Corpo della richiesta:
+```json
+{
+  "email": "example@domain.com",
+  "password": "securepassword123"
+}
+```
+
+Risposta (200 OK):
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI...",
+  "user": {
+    "id": "656e7a...",
+    "name": "Nome Utente",
+    "email": "example@domain.com"
+  }
+}
+```
+
+### Utilizzo del token JWT
+
+Per accedere alle API protette, includi il token JWT nell'header di autorizzazione:
+
+```
+Authorization: Bearer eyJhbGciOiJIUzI...
+```
