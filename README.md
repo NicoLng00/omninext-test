@@ -50,25 +50,4 @@ http://localhost:5000/api/docs
 - **flake8**: Per il linting del codice
 - **black**: Per la formattazione del codice
 
-## Installazione e Avvio
-
-1. Clonare il repository
-2. Installare le dipendenze: `pip install -r requirements.txt`
-3. Configurare il file `.env` con i parametri di connessione MongoDB
-4. Avviare il server: `python app.py`
-
-## Struttura del Progetto
-
-omnitext_backend/
-├── Modules/
-│ ├── Users/
-│ │ ├── Controllers/
-│ │ ├── Services/
-│ │ ├── Contracts/
-│ │ └── User.py
-├── app.py
-├── .env
-└── README.md
-```
-
 Questo progetto dimostra una solida comprensione di Python, Flask, MongoDB e dei principi di progettazione orientata agli oggetti, implementando best practices moderne per lo sviluppo di APIs e del Backend.
