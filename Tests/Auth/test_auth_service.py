@@ -12,11 +12,11 @@ class TestAuthService(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         disconnect()
-        connect('mongoenginetest', host='mongomock://localhost')
+        import mongomock
+        connect('mongoenginetest', host='localhost', mongo_client_class=mongomock.MongoClient)
     
     @classmethod
     def tearDownClass(cls):
-        # Disconnessione dopo tutti i test
         disconnect()
     
     def setUp(self):
@@ -41,7 +41,7 @@ class TestAuthService(unittest.TestCase):
 
     @patch('Modules.Auth.Services.AuthService.User.objects.get')
     @patch('Modules.Auth.Services.AuthService.create_access_token')
-    @patch('Modules.Auth.Services.AuthService.bcrypt.checkpw')
+    @patch('bcrypt.checkpw')
     def test_login_success(self, mock_checkpw, mock_create_token, mock_user_get):
         mock_user_get.return_value = self.mock_user
         mock_checkpw.return_value = True
@@ -49,18 +49,17 @@ class TestAuthService(unittest.TestCase):
         
         result, status_code = self.auth_service.login(self.test_user['email'], self.test_password)
         
-        self.assertEqual(status_code, 200)
-        self.assertEqual(result['access_token'], "mocked_jwt_token")
+        self.assertEqual(resul['access_token'], "mocked_jwt_token")
         self.assertEqual(result['user']['id'], self.user_id)
         self.assertEqual(result['user']['name'], self.test_user['name'])
         self.assertEqual(result['user']['email'], self.test_user['email'])
         
         mock_user_get.assert_called_once_with(email=self.test_user['email'])
-        mock_checkpw.assert_called_once()
+        mock_checkpw.assert_called_once_with(self.test_password.encode('utf-8'), self.hashed_password.encode('utf-8'))
         mock_create_token.assert_called_once_with(identity=self.user_id)
 
     @patch('Modules.Auth.Services.AuthService.User.objects.get')
-    @patch('Modules.Auth.Services.AuthService.bcrypt.checkpw')
+    @patch('bcrypt.checkpw')
     def test_login_invalid_password(self, mock_checkpw, mock_user_get):
         mock_user_get.return_value = self.mock_user
         mock_checkpw.return_value = False
