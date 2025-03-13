@@ -51,3 +51,32 @@ http://localhost:5000/api/docs
 - **black**: Per la formattazione del codice
 
 Questo progetto dimostra una solida comprensione di Python, Flask, MongoDB e dei principi di progettazione orientata agli oggetti, implementando best practices moderne per lo sviluppo di APIs e del Backend.
+
+## Test
+
+Il progetto include test unitari completi che verificano la corretta funzionalità del layer di servizio.
+
+### Test Implementati
+
+I test si concentrano sui metodi della classe `UserService` e verificano:
+
+- **Validazione Email**: Test per confermare che il validatore di email riconosca correttamente formati validi e invalidi
+- **Recupero Utenti**: Test per il metodo `find_by_id` che verifica:
+  - Recupero corretto di utenti esistenti
+  - Gestione appropriata quando l'utente non esiste
+- **Creazione Utenti**: Test per il metodo `create` che verifica:
+  - Creazione corretta con dati validi
+  - Validazione di input incompleti o invalidi
+  - Gestione dei duplicati email
+  - Gestione degli errori imprevisti
+
+### Approccio ai Test
+
+I test unitari utilizzano il pattern AAA (Arrange-Act-Assert) e sfruttano la libreria unittest.mock per simulare le dipendenze esterne, garantendo che i test siano:
+
+- **Veloci**: Non richiedono connessioni a database reali
+- **Isolati**: Ogni test è indipendente dagli altri
+- **Ripetibili**: Producono sempre lo stesso risultato in qualsiasi ambiente
+- **Auto-verificanti**: Determinano automaticamente se il test è passato o fallito
+
+Questo approccio assicura che i cambiamenti al codice possano essere testati rapidamente e con fiducia.
