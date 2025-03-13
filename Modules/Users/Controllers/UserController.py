@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 from ..Services.UserService import UserService
 
 user_blueprint = Blueprint('user', __name__)
@@ -8,3 +8,14 @@ def get_user(user_id):
     user_service = UserService()
     response, status_code = user_service.find_by_id(user_id)
     return jsonify(response), status_code
+
+@user_blueprint.route('/create', methods=['POST'])
+def create_user():
+    data = request.get_json()
+    user_service = UserService()
+    response, status_code = user_service.create(data)
+    return jsonify(response), status_code
+
+    
+
+    

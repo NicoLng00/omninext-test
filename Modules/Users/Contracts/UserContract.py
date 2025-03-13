@@ -7,5 +7,9 @@ class UserContract(ABC):
     def find_by_id(self, user_id: str):
         pass
 
+    @abstractmethod
+    def create(self, data):
+        pass
+
 
 
