@@ -1,0 +1,35 @@
+# Ambiente virtuale
+venv/
+.env
+*.pyc
+__pycache__/
+instance/
+db.sqlite3
+.DS_Store
+
+# Log e cache
+*.log
+*.out
+*.pid
+*.swp
+*.swo
+
+# Configurazioni IDE/editor
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Dipendenze
+pip-log.txt
+pip-delete-this-directory.txt
+
+# File temporanei e cartelle di test
+tests/__pycache__/
+.coverage
+htmlcov/
+.tox/
+.nox/
+.cache/
+dist/
+build/
