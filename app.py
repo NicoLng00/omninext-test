@@ -25,8 +25,8 @@ api_bp = Blueprint('api', __name__, url_prefix='/api')
 api = Api(
     api_bp,
     version='1.0',
-    title='OmniText API',
-    description='A set of APIs for OmniText backend services',
+    title='Omninext API',
+    description='A set of APIs for Omninext backend services',
     doc='/docs',
     authorizations={
         'Bearer Auth': {
