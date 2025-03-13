@@ -1,6 +1,9 @@
 # Ambiente virtuale
 venv/
 .env
+omnitext_backend/.env
+
+# Python cache e file temporanei
 *.pyc
 __pycache__/
 instance/
@@ -20,16 +23,16 @@ db.sqlite3
 *.sublime-project
 *.sublime-workspace
 
-# Dipendenze
+# Dipendenze e build
 pip-log.txt
 pip-delete-this-directory.txt
+dist/
+build/
 
-# File temporanei e cartelle di test
+# Cartelle di test
 tests/__pycache__/
 .coverage
 htmlcov/
 .tox/
 .nox/
 .cache/
-dist/
-build/
