@@ -18,7 +18,7 @@ api = Api(
     api_bp,
     version='1.0',
     title='OmniText API',
-    description='A set of APIs for OmniText backend services',
+    description='Omnitext Test APIs - Nicola Longobardi',
     doc='/docs',
 )
 
