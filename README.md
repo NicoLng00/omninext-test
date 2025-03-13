@@ -1,4 +1,4 @@
-# OmniText Backend
+# Omninext Backend
 
 Questo progetto è un backend API sviluppato per dimostrare competenze avanzate in Python e Flask, utilizzando un approccio orientato agli oggetti (OOP) con pattern architetturali moderni.
 
