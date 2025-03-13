@@ -32,7 +32,7 @@ http://localhost:5000/api/docs
 È possibile utilizzare Postman per interagire con le API. Di seguito alcuni esempi di endpoint disponibili:
 
 - `GET /api/users/{user_id}`: Recupera un utente specifico
-- `POST /api/users`: Crea un nuovo utente
+- `POST /api/users/create`: Crea un nuovo utente
 
 ## Dipendenze del Progetto
 
